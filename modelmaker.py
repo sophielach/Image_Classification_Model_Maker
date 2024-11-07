@@ -12,7 +12,7 @@ from delete_images import *
 class ModelMaker:
 	def __init__(self, keywords, num_images, key, dataset_name, model_name, train_epochs):
 		self.keywords = keywords
-		self.num_images = num_images
+		self.num_images = num_images # Now a list corresponding to each keyword
 		self.key = key
 		self.dataset_name = dataset_name
 		self.model_name = model_name
@@ -26,8 +26,8 @@ class ModelMaker:
 		if not os.path.exists(image_path):
 			os.makedirs(image_path)
 
-		# Go through each keyword
-		for keyword in self.keywords:
+		# Go through each keyword and corresponding number of images
+		for keyword, num_images_for_keyword in zip(self.keywords, self.num_images):
 			# Create a folder for each keyword
 			save_path = image_path + keyword
 			if not os.path.exists(save_path):
@@ -35,7 +35,7 @@ class ModelMaker:
 
 			# Download images from Bing
 			bing_crawler = BingImageCrawler(storage={'root_dir': save_path})
-			bing_crawler.crawl(keyword=keyword, max_num=self.num_images)
+			bing_crawler.crawl(keyword=keyword, max_num=num_images_for_keyword)
 
 	def filter_images(self):
 		# open Gradio interface to delete photos as necessary
@@ -44,7 +44,8 @@ class ModelMaker:
     
 		# Open the Gradio interface for each folder
 		for folder in folders:
-			print(f"Opening interface for folder: {folder}")
+			#category_name = os.path.basename(folder)
+			print(f"Opening interface for catgory: {folder}") # change this to remove .images
 			interface = create_interface(folder)
 			interface.launch()
 
