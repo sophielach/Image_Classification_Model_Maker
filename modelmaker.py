@@ -37,6 +37,17 @@ class ModelMaker:
 			bing_crawler = BingImageCrawler(storage={'root_dir': save_path})
 			bing_crawler.crawl(keyword=keyword, max_num=self.num_images)
 
+	def filter_images(self):
+		# open Gradio interface to delete photos as necessary
+		data_dir = './images'
+		folders = [f.path for f in os.scandir(data_dir) if f.is_dir()]
+    
+		# Open the Gradio interface for each folder
+		for folder in folders:
+			print(f"Opening interface for folder: {folder}")
+			interface = create_interface(folder)
+			interface.launch()
+
 	def upload_dataset(self):
 		# Create a dataset repo
 		self.dataset_id = create_repo(self.dataset_name, token=self.key, repo_type="dataset").repo_id
