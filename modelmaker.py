@@ -4,7 +4,7 @@ from datasets import load_dataset
 from transformers import AutoImageProcessor, DefaultDataCollator
 from transformers import AutoModelForImageClassification, TrainingArguments, Trainer
 import evaluate
-from torchvision.transforms import RandomResizedCrop, Compose, Normalize, ToTensor
+from torchvision.transforms import RandomAffine, Compose, Normalize, ToTensor, Resize, 
 import numpy as np
 import os
 from delete_images import *
@@ -92,6 +92,7 @@ class ModelMaker:
 				print(f"Source folder does not exist: {source_folder}")
 
 		print(f"All images from {list_of_keys[1:]} merged into {target_folder}.")
+
 	def upload_dataset(self):
 		# Create a dataset repo
 		self.dataset_id = create_repo(self.dataset_name, token=self.key, repo_type="dataset").repo_id
@@ -122,6 +123,8 @@ class ModelMaker:
 		checkpoint = "google/vit-base-patch16-224-in21k"
 		image_processor = AutoImageProcessor.from_pretrained(checkpoint)
 
+		# removed random crop. 
+
 		# Apply some image transformations to the images to make the model more robust against overfitting
 		# Crop a random part of the image, resize it, and normalize it with the image mean and standard deviation
 		normalize = Normalize(mean=image_processor.image_mean, std=image_processor.image_std)
@@ -130,8 +133,16 @@ class ModelMaker:
 			if "shortest_edge" in image_processor.size
 			else (image_processor.size["height"], image_processor.size["width"])
 		)
-		_transforms = Compose([RandomResizedCrop(size), ToTensor(), normalize])
-
+		_transforms = Compose([
+			Resize(size),                 # Resize to match model input size
+			RandomAffine(
+				degrees=5,                # Small rotation for slight variability
+				translate=(0.05, 0.05),   # Minor translation to avoid extreme displacement
+				scale=(0.95, 1.05)        # Minor scaling to keep items realistically sized
+			),
+			ToTensor(),
+			normalize
+		])
 		# Preprocessing function to apply the transforms and return the pixel_values 
 		def transforms(examples):
 			examples["pixel_values"] = [_transforms(img.convert("RGB")) for img in examples["image"]]
