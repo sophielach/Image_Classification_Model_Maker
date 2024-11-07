@@ -7,6 +7,7 @@ import evaluate
 from torchvision.transforms import RandomResizedCrop, Compose, Normalize, ToTensor
 import numpy as np
 import os
+from delete_images import *
 
 class ModelMaker:
 	def __init__(self, keywords, num_images, key, dataset_name, model_name, train_epochs):
