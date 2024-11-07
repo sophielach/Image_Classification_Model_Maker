@@ -8,6 +8,7 @@ from torchvision.transforms import RandomResizedCrop, Compose, Normalize, ToTens
 import numpy as np
 import os
 from delete_images import *
+import shutil
 
 class ModelMaker:
 	def __init__(self, keywords, num_images, key, dataset_name, model_name, train_epochs):
@@ -48,6 +49,40 @@ class ModelMaker:
 			print(f"Opening interface for catgory: {folder}") # change this to remove .images
 			interface = create_interface(folder)
 			interface.launch()
+
+	def merge_keywords(self, list_of_keys):
+		# merge all keywords' images into the first one of the list
+		# the first keyword may be 'empty' or already contain images
+		if not list_of_keys:
+			print("No keywords provided for merging.")
+			return
+
+		base_dir = './images'
+		target_folder = os.path.join(base_dir, list_of_keys[0])
+		
+		# Ensure the target folder exists - if not, make one
+		if not os.path.exists(target_folder):
+			os.makedirs(target_folder)
+
+		# Loop over the other keywords and move their contents
+		for keyword in list_of_keys[1:]:
+			source_folder = os.path.join(base_dir, keyword)
+			
+			# Check if the source folder exists
+			if os.path.exists(source_folder):
+				# Move each file from the source folder to the target folder
+				for filename in os.listdir(source_folder):
+					source_path = os.path.join(source_folder, filename)
+					target_path = os.path.join(target_folder, filename)			
+					shutil.move(source_path, target_path)
+				
+				# Remove the now-empty source folder
+				os.rmdir(source_folder)
+				print(f"Merged and removed folder: {source_folder}")
+			else:
+				print(f"Source folder does not exist: {source_folder}")
+
+		print(f"All images from {list_of_keys[1:]} merged into {target_folder}.")
 
 	def upload_dataset(self):
 		# Create a dataset repo
