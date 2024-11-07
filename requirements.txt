@@ -9,3 +9,4 @@ transformers[torch]
 evaluate
 torchvision
 scikit-learn
+gradio
