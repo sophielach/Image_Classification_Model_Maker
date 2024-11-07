@@ -4,7 +4,7 @@ from datasets import load_dataset
 from transformers import AutoImageProcessor, DefaultDataCollator
 from transformers import AutoModelForImageClassification, TrainingArguments, Trainer
 import evaluate
-from torchvision.transforms import RandomAffine, Compose, Normalize, ToTensor, Resize, 
+from torchvision.transforms import RandomAffine, Compose, Normalize, ToTensor, Resize
 import numpy as np
 import os
 from delete_images import *
