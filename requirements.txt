@@ -10,4 +10,3 @@ evaluate
 torchvision
 scikit-learn
 gradio
-shutil
