@@ -1,6 +1,14 @@
 # Easy Image Classification Model Maker
 Create a custom image classification model with a few lines of code. This module scrapes images, formats and uploads the image dataset to 🤗, and trains a 🤗 model. Built on top of 🤗 Transformers and 🤗 Datasets.
 
+
+Adjustments from forked version: 
+1. Download varying numbers of pictures for each category
+2. Added Gradio interface to sort through pictures and delete irrelevant ones before uploading dataset
+3. Removes cropping images during preprocessing - instead, simply rotates
+
+
+
 ## Installation
 ```bash
 pip install -r requirements.txt
