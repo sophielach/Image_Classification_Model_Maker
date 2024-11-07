@@ -73,7 +73,16 @@ class ModelMaker:
 				# Move each file from the source folder to the target folder
 				for filename in os.listdir(source_folder):
 					source_path = os.path.join(source_folder, filename)
-					target_path = os.path.join(target_folder, filename)			
+					target_path = os.path.join(target_folder, filename)
+
+					# If a file with the same name exists, rename the file
+					if os.path.exists(target_path):
+						base, ext = os.path.splitext(filename)
+						counter = 1
+						while os.path.exists(target_path):
+							target_path = os.path.join(target_folder, f"{base}_{counter}{ext}")
+							counter += 1
+
 					shutil.move(source_path, target_path)
 				
 				# Remove the now-empty source folder
@@ -83,7 +92,6 @@ class ModelMaker:
 				print(f"Source folder does not exist: {source_folder}")
 
 		print(f"All images from {list_of_keys[1:]} merged into {target_folder}.")
-
 	def upload_dataset(self):
 		# Create a dataset repo
 		self.dataset_id = create_repo(self.dataset_name, token=self.key, repo_type="dataset").repo_id
