@@ -2,11 +2,21 @@
 Create a custom image classification model with a few lines of code. This module scrapes images, formats and uploads the image dataset to 🤗, and trains a 🤗 model. Built on top of 🤗 Transformers and 🤗 Datasets.
 
 
-Adjustments from forked version: 
+Added features from forked version: 
 1. Download varying numbers of pictures for each category
-2. Added Gradio interface to sort through pictures and delete irrelevant ones before uploading dataset
-3. Removes cropping images during preprocessing - instead, simply rotates
+2. Use a Gradio interface to sort through pictures and manually delete irrelevant ones before uploading dataset, via `filter_images()`
+3. Merge categories before uploading the dataset via `merge_categories`, which takes a list of all categories and places all images under the category of the first one in the list
+4. Preprocess images with affine instead of cropping
+ 
 
+ Future additions I will likely add:
+5. Remove duplicate photos from each category with `remove_duplicate_images`
+6. Allow the option of affine **or** cropping for data preprocessing
+7. `load_dataset`: load a dataset from huggingface and add it seamlessly into './images'
+8. `visualize_misclasses`: see which images the model most struggle with, and if they should be reasigned/corrected
+9. `retrain`: add the ability to retrain the model again after shifting aronud the dataset. allow for more hyperparameter tuning
+10. demo notebook
+11. update `README` to reflect the new functions and their parameters
 
 
 ## Installation
