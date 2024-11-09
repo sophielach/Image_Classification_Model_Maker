@@ -10,6 +10,7 @@ Added features from forked version:
  
 
  Future additions I will likely add:
+ 
 5. Remove duplicate photos from each category with `remove_duplicate_images`
 6. Allow the option of affine **or** cropping for data preprocessing
 7. `load_dataset`: load a dataset from huggingface and add it seamlessly into './images'
